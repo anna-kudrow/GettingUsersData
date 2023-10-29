@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 //import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.formatDate;
 
 public class InfoService {
-    public String[] getInfo() throws IOException, NotEnoughData, NameInputException, GenderException, BdayFormatException, NotExistingData, PhoneNumberException {
+    public String getInfo() throws IOException, NotEnoughData, NameInputException, GenderException, BdayFormatException, NotExistingData, PhoneNumberException {
         System.out.println("Input your your last name, first name, surname, birthday, not split mobile phone number(only digits) and gender(m/f) with gaps:");
         try (Scanner cs = new Scanner(System.in);) {
             String personData = cs.nextLine();
@@ -16,9 +16,9 @@ public class InfoService {
             if (!onlySymbols(personDataList)) throw new NameInputException();
             if (!checkBdayFormat(personDataList[3])) throw new BdayFormatException();
             if (personDataList[4].length() != 11 || !isDigit(personDataList[4])) throw new PhoneNumberException();
-            if (personDataList[5].length() != 1 || !personDataList[5].contains("m") || !personDataList[5].equals("f")) throw new GenderException();
+//            if (personDataList[5].length() != 1 || !personDataList[5].contains("m") || !personDataList[5].contains("f")) throw new GenderException();
 
-            return personDataList;
+            return personData;
         }
     }
 
