@@ -9,14 +9,14 @@ import java.util.regex.Pattern;
 public class InfoService {
     public String getInfo() throws IOException, NotEnoughData, NameInputException, GenderException, BdayFormatException, NotExistingData, PhoneNumberException {
         System.out.println("Input your your last name, first name, surname, birthday, not split mobile phone number(only digits) and gender(m/f) with gaps:");
-        try (Scanner cs = new Scanner(System.in);) {
+        try (Scanner cs = new Scanner(System.in)) {
             String personData = cs.nextLine();
             String[] personDataList = personData.split(" ");
             if (personDataList.length < 6) throw new NotEnoughData();
             if (!onlySymbols(personDataList)) throw new NameInputException();
             if (!checkBdayFormat(personDataList[3])) throw new BdayFormatException();
             if (personDataList[4].length() != 11 || !isDigit(personDataList[4])) throw new PhoneNumberException();
-//            if (personDataList[5].length() != 1 || !personDataList[5].contains("m") || !personDataList[5].contains("f")) throw new GenderException();
+            if (personDataList[5].length() != 1 || (!personDataList[5].contains("m") && !personDataList[5].contains("f"))) throw new GenderException();
 
             return personData;
         }
@@ -34,7 +34,7 @@ public class InfoService {
 
     public boolean checkBdayFormat(String str) {
         String[] strArr = str.split("\\.");
-        if (checkDigitsInBirthDay(str)
+        return checkDigitsInBirthDay(str)
                 && checkPointinBirthDay(str)
                 && strArr[0].length() == 2
                 && Integer.parseInt(strArr[0]) < 32
@@ -44,13 +44,11 @@ public class InfoService {
                 && Integer.parseInt(strArr[1]) > 0
                 && strArr[2].length() == 4
                 && Integer.parseInt(strArr[2]) < 2020
-                && Integer.parseInt(strArr[2]) > 1900) return true;
-        return false;
+                && Integer.parseInt(strArr[2]) > 1900;
     }
 
     public boolean checkPointinBirthDay(String str){
-        if (!Character.toString(str.charAt(2)).equals(".") && !Character.toString(str.charAt(5)).equals(".")) return false;
-        return true;
+        return Character.toString(str.charAt(2)).equals(".") || Character.toString(str.charAt(5)).equals(".");
     }
     public boolean checkDigitsInBirthDay(String str) {
         String[] strArr = str.split("\\.");
